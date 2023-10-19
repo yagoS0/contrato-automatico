@@ -1,7 +1,7 @@
 import path from "path";
 import fs from 'fs'
 
-import {gerarContratoAlteraçaoEmpresa} from '../core'
+import {gerarDocumento} from '../gerarDocumento'
 
 export async function createContrato(
   request, 
@@ -11,7 +11,7 @@ export async function createContrato(
   const dadosContrato = await request.body;
   console.log(dadosContrato)
   
-  const contratoAlteraçaoEmpresa = await gerarContratoAlteraçaoEmpresa(dadosContrato);
+  const contratoAlteraçaoEmpresa = await gerarDocumento(dadosContrato);
 
   // Salva o contrato gerado em um novo arquivo
   fs.writeFileSync(path.resolve( 'src/out', 
