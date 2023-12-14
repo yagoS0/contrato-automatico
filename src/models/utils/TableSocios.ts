@@ -1,5 +1,5 @@
 import {Paragraph, TextRun, TableRow, TableCell, VerticalAlign, WidthType, AlignmentType} from 'docx'
-import {data} from '../tests/data_test'
+import {data} from '../../tests/data_test'
 
 
 export class TableSocios{

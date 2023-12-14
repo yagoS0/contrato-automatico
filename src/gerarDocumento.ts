@@ -1,14 +1,16 @@
-import {Document, Packer, Paragraph, TextRun, AlignmentType, Spacing} from 'docx'
+import {Packer} from 'docx'
 import Contrato from '../src/services/Contrato';
-import ParagrafosConsolidacao from '../src/services/ParagrafosConsolidacao'
-const paragrafoConsolidacao = new ParagrafosConsolidacao()
+import ContratoAlteração from './models/ContratoAlteração';
 
 const contrato = new Contrato()
-
-export async function gerarDocumento(dados) {
+const contratoAlteração = new ContratoAlteração()
+export async function gerarDocumento(data) {
   
 
-  const doc = contrato.create()
+  const paragrafos = contratoAlteração.create()
+
+
+  const doc = contrato.create(paragrafos)
   
   const buffer = await Packer.toBuffer(doc);
 

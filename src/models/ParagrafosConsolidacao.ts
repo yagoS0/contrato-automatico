@@ -1,6 +1,6 @@
 import {data} from '../tests/data_test'
 import {Paragraph, TextRun, AlignmentType, Table, BorderStyle, WidthType} from 'docx'
-import { TableSocios } from './TableSocios'
+import { TableSocios } from './utils/TableSocios'
 const tableSocios = new TableSocios()
 
 

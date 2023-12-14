@@ -1,11 +1,16 @@
-import {Paragraph, TextRun, AlignmentType, Table, BorderStyle, WidthType} from 'docx'
+import {Paragraph, TextRun, AlignmentType, Table, WidthType} from 'docx'
+import { TableSocios } from './utils/TableSocios'
+import { FileChild } from 'docx/build/file/file-child';
 import {data} from '../tests/data_test'
-import { TableSocios } from './TableSocios'
+
 
 const tableSocios = new TableSocios()
 
-export default class ParagrafoAlteracao {
-  titulo(){
+export default class ContratoAlteração {
+  
+  create(){
+    const paragrafos: FileChild[]  = []
+    
     const titulo = new Paragraph({
       children: [
         new TextRun({
@@ -35,10 +40,7 @@ export default class ParagrafoAlteracao {
       }
       
     }) 
-    return titulo
-  }
-
-  dadosSocio(){
+    paragrafos.push(titulo)
     const dadosSocio = new Paragraph({
       children: [
         new TextRun({
@@ -71,17 +73,14 @@ export default class ParagrafoAlteracao {
       spacing: {
         after: 600
       },
-      
-        
     })
-    return dadosSocio
-  }
-  descricaoEmpresa(){
+    paragrafos.push(dadosSocio)
+
     const enderecoEscabelecimento = `${data.dadosEmpresa.endereco.rua},${data.dadosEmpresa.endereco.numero} - 
     ${data.dadosEmpresa.endereco.complemento} - ${data.dadosEmpresa.endereco.estado}/${data.dadosEmpresa.endereco.cidade}
     - ${data.dadosEmpresa.endereco.cep}`
 
-    return new Paragraph({
+    const descricaoEmpresa = new Paragraph({
       
       children: [
    
@@ -103,11 +102,8 @@ export default class ParagrafoAlteracao {
       
         
     })
-  }
-
-  alteracaoNomeEmpresarial(){
-
-    const titulo =  new Paragraph({
+    paragrafos.push(descricaoEmpresa )
+    const alteracaoNomeEmpresarial =  new Paragraph({
       
       children: [
    
@@ -130,7 +126,7 @@ export default class ParagrafoAlteracao {
         
     })
 
-    const clausula  =  new Paragraph({
+    const clausulaAlteracaoNomeEmpresarial  =  new Paragraph({
       
       children: [
    
@@ -156,24 +152,15 @@ export default class ParagrafoAlteracao {
       spacing: {
         after: 600
       },
-      
-        
     })
-    return {titulo, clausula}
-  }
 
-  alteracaoEndereco(){
-    const enderecoAntigo = `${data.alteracoes.endereco.antigoEndereco.rua}
-    ${data.alteracoes.endereco.antigoEndereco.numero}
-    ${data.alteracoes.endereco.antigoEndereco.complemento}
-    ${data.alteracoes.endereco.antigoEndereco.estado}/
-    ${data.alteracoes.endereco.antigoEndereco.cidade} - 
-    ${data.alteracoes.endereco.antigoEndereco.cep}
-    `
+    paragrafos.push(alteracaoNomeEmpresarial,clausulaAlteracaoNomeEmpresarial)
+    
     const enderecoNovo = `${data.dadosEmpresa.endereco.rua},${data.dadosEmpresa.endereco.numero} - 
     ${data.dadosEmpresa.endereco.complemento} - ${data.dadosEmpresa.endereco.estado}/${data.dadosEmpresa.endereco.cidade}
     - ${data.dadosEmpresa.endereco.cep}`
-    const titulo =  new Paragraph({
+
+    const alteracaoEndereco =  new Paragraph({
       
       children: [
    
@@ -196,7 +183,7 @@ export default class ParagrafoAlteracao {
         
     })
 
-    const clausula  =  new Paragraph({
+    const clausulaAlteracaoEndereco  =  new Paragraph({
       
       children: [
    
@@ -209,7 +196,7 @@ export default class ParagrafoAlteracao {
           }
         }),
         new TextRun({
-          text: `A sociedade que vinha exercendo suas atividades no endereço sito à ${enderecoAntigo}, passa a fazê-lo no seguinte endereço sito à ${enderecoNovo}`,
+          text: `A sociedade que vinha exercendo suas atividades no endereço sito à ${enderecoEscabelecimento}, passa a fazê-lo no seguinte endereço sito à ${enderecoNovo}`,
           size: 24,
           font: {
             name: 'Arial'
@@ -225,12 +212,9 @@ export default class ParagrafoAlteracao {
       
         
     })
-    return {titulo, clausula}
-  }
- 
-  objetoSocial(){
+    paragrafos.push(alteracaoEndereco, clausulaAlteracaoEndereco)
 
-    const titulo = new Paragraph({
+    const alteracaoObjetoSocial = new Paragraph({
       children: [
 
         new TextRun({
@@ -248,7 +232,7 @@ export default class ParagrafoAlteracao {
         before: 800
       }
     });
-    const clasulaQuinta = new Paragraph({
+    const calsulaAlteracaoObjetoSocial = new Paragraph({
     
       children: [
         new TextRun({
@@ -311,9 +295,10 @@ export default class ParagrafoAlteracao {
         after: 200
       }
     })
+    paragrafos.push(alteracaoObjetoSocial,calsulaAlteracaoObjetoSocial,descricaoAtividade,codificacaoAtividade)
 
-    const cnaeAtividade = new Paragraph({
-      children: [
+    const Cnae = new Paragraph({   
+      children:[
         new TextRun({
           text: `${data.dadosEmpresa.atividade.numeroCnae} - `,
           font: {
@@ -321,33 +306,26 @@ export default class ParagrafoAlteracao {
           },
           size: 24,
           bold:true
-        }),   
+        }),
         new TextRun({
-          text: `${data.dadosEmpresa.atividade.descricaoCnae}`,
+          text: `${data.dadosEmpresa.atividade.descricaoAtividade}`,
           font: {
             name: 'Arial'
           },
           size: 24,
-        }), 
-      ],
+        })
+      ],  
       alignment: AlignmentType.BOTH,
       spacing: {
         after: 200
       }
-    })
-    return {titulo,clasulaQuinta,descricaoAtividade,codificacaoAtividade,cnaeAtividade}
-  }
-  aumentoCapitalSocial(){
-    const textClasula = `
-    O capital social que era de R$ ${data.alteracoes.capitalSocial.antigoCapital} (${data.alteracoes.capitalSocial.antigoCapitalExtenso} reais), 
-    passa a ser de R$ ${data.alteracoes.capitalSocial.novoCapital}. (${data.alteracoes.capitalSocial.novoCapitalExtenso} reais) representado por  
-    ${data.alteracoes.capitalSocial.quotas}(${data.alteracoes.capitalSocial.valorQuotaExtenso}) quotas de capital, 
-    no valor nominal de R$ ${data.alteracoes.capitalSocial.valorQuotas} (${data.alteracoes.capitalSocial.valorQuotaExtenso} real) cada uma,
-    cujo aumento é totalmente subscrito e integralizado, neste ato,
-    em moeda corrente nacional, pelos sócios. Em decorrência do aumento de capital social, 
-    este fica assim distribuído:    `
 
-    const nameClasula = new Paragraph({
+    })
+    paragrafos.push(Cnae)
+
+
+
+    const capitalSocial = new Paragraph({
       children: [
 
         new TextRun({
@@ -365,7 +343,7 @@ export default class ParagrafoAlteracao {
         before: 800
       }
     });
-    const clasula = new Paragraph({
+    const clasulaCapitalSocial = new Paragraph({
     
       children: [
 
@@ -378,7 +356,7 @@ export default class ParagrafoAlteracao {
           bold: true,
         }),
         new TextRun({
-          text: textClasula ,
+          text: `O capital social que era de R$ ${data.alteracoes.capitalSocial.antigoCapital} (${data.alteracoes.capitalSocial.antigoCapitalExtenso} reais), passa a ser de R$ ${data.alteracoes.capitalSocial.novoCapital}. (${data.alteracoes.capitalSocial.novoCapitalExtenso} reais) representado por ${data.alteracoes.capitalSocial.quotas}(${data.alteracoes.capitalSocial.valorQuotaExtenso}) quotas de capital, no valor nominal de R$ ${data.alteracoes.capitalSocial.valorQuotas} (${data.alteracoes.capitalSocial.valorQuotaExtenso} real) cada uma, cujo aumento é totalmente subscrito e integralizado, neste ato, em moeda corrente nacional, pelos sócios. Em decorrência do aumento de capital social, este fica assim distribuído:` ,
           font: {
             name: 'Arial'
           },
@@ -393,7 +371,7 @@ export default class ParagrafoAlteracao {
       }
     });
 
-    const capitalTabela = new Table({
+    const capitalSocialTabela = new Table({
       alignment: AlignmentType.CENTER,     
       width: {
         size: 100,
@@ -407,7 +385,7 @@ export default class ParagrafoAlteracao {
      
     })
     
-    const paragrafoUnico = new Paragraph ({
+    const responsabilidadeDosSocios = new Paragraph ({
       children: [
 
         new TextRun({
@@ -419,7 +397,7 @@ export default class ParagrafoAlteracao {
           bold: true,
         }),
         new TextRun({
-          text: 'A responsabilidade dos sócios é restrita ao valor de suas quotas, mas todos respondem solidariamente pela integralização do capital social, na forma do art. 1052 da Lei 10.406/02. Cada quota é indivisível e confere a seu titular o direito a voto nas deliberações sociais. ' ,
+          text: ' A responsabilidade dos sócios é restrita ao valor de suas quotas, mas todos respondem solidariamente pela integralização do capital social, na forma do art. 1052 da Lei 10.406/02. Cada quota é indivisível e confere a seu titular o direito a voto nas deliberações sociais. ' ,
           font: {
             name: 'Arial'
           },
@@ -428,11 +406,13 @@ export default class ParagrafoAlteracao {
       ],
       alignment: AlignmentType.BOTH,
       spacing: {
-        after: 400
+        after: 400,
+        before: 400,
       }
     })
-
-    return {nameClasula,clasula, capitalTabela, paragrafoUnico}
+    paragrafos.push(capitalSocial,clasulaCapitalSocial,capitalSocialTabela, responsabilidadeDosSocios)
+    return paragrafos
   }
 
 }
+
