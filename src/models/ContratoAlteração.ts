@@ -41,40 +41,43 @@ export default class ContratoAlteração {
       
     }) 
     paragrafos.push(titulo)
-    const dadosSocio = new Paragraph({
-      children: [
-        new TextRun({
-          text: '1. ',
-          bold: true,
-          size: 24,
-          font: {
-            name: 'Arial'
-          }
-        }),
-        new TextRun({
-          text: data.dadosSocio.nome,
-          size: 24,
-          bold: true,
-          font: {
-            name: 'Arial'
-          }
-        }),
-        new TextRun({
-            text: ` nacionalidade ${data.dadosSocio.nacionalidade}, nascido(a) em ${data.dadosSocio.nascimento}, EMPRESARIO(A), casado em ***********, CPF nº ${data.dadosSocio.cpf}, identidade nº ${data.dadosSocio.identidade}, órgão expedidor ${data.dadosSocio.orgaoExpeditor}, residente e domiciliado no(a) ${data.dadosSocio.endereco.rua}, ${data.dadosSocio.endereco.numero} - ${data.dadosSocio.endereco.complemento} - ${data.dadosSocio.endereco.cidade}/${data.dadosSocio.endereco.estado} - ${data.dadosSocio.endereco.cep}`,
+    data.dadosSocio.socios.forEach((socio, index) => {
+      const dadosSocio = new Paragraph({
+        children: [
+          new TextRun({
+            text: `${index + 1}. `,
+            bold: true,
             size: 24,
             font: {
               name: 'Arial'
             }
-          
-          })
-      ],
-   
-      alignment: AlignmentType.BOTH,
-      spacing: {
-        after: 600
-      },
+          }),
+          new TextRun({
+            text: socio.nome,
+            size: 24,
+            bold: true,
+            font: {
+              name: 'Arial'
+            }
+          }),
+          new TextRun({
+              text: ` nacionalidade ${socio.nacionalidade}, nascido(a) em ${socio.nascimento}, EMPRESARIO(A), casado em ***********, CPF nº ${socio.cpf}, identidade nº ${socio.identidade}, órgão expedidor ${socio.orgaoExpeditor}, residente e domiciliado no(a) ${socio.endereco.rua}, ${socio.endereco.numero} - ${socio.endereco.complemento} - ${socio.endereco.cidade}/${socio.endereco.estado} - ${socio.endereco.cep}`,
+              size: 24,
+              font: {
+                name: 'Arial'
+              }
+            
+            })
+        ],
+     
+        alignment: AlignmentType.BOTH,
+        spacing: {
+          after: 600
+        },
+      })
+      paragrafos.push(dadosSocio)
     })
-    paragrafos.push(dadosSocio)
+   
 
     const enderecoEscabelecimento = `${data.dadosEmpresa.endereco.rua},${data.dadosEmpresa.endereco.numero} - 
     ${data.dadosEmpresa.endereco.complemento} - ${data.dadosEmpresa.endereco.estado}/${data.dadosEmpresa.endereco.cidade}
@@ -103,62 +106,69 @@ export default class ContratoAlteração {
         
     })
     paragrafos.push(descricaoEmpresa )
-    const alteracaoNomeEmpresarial =  new Paragraph({
-      
-      children: [
-   
-        new TextRun({
-          text: `NOME EMPRESARIAL`,
-          bold: true,
-          size: 24,
-          font: {
-            name: 'Arial'
-          }
-        }),
-       
-      ],
-   
-      alignment: AlignmentType.CENTER,
-      spacing: {
-        after: 200
-      },
-      
-        
-    })
-
-    const clausulaAlteracaoNomeEmpresarial  =  new Paragraph({
-      
-      children: [
-   
-        new TextRun({
-          text: `CLÁUSULA ${data.alteracoes.nomeEmpresarial.numeroClasula}  `,
-          bold: true,
-          size: 24,
-          font: {
-            name: 'Arial'
-          }
-        }),
-        new TextRun({
-          text: `A sociedade que gira sob o nome empresarial ${data.razaoSocial}, girará, a partir da data do arquivamento, sob o nome empresarial ${data.alteracoes.nomeEmpresarial.novoNome}.`,
-          size: 24,
-          font: {
-            name: 'Arial'
-          }
-        }),
-       
-      ],
-   
-      alignment: AlignmentType.BOTH,
-      spacing: {
-        after: 600
-      },
-    })
-
-    paragrafos.push(alteracaoNomeEmpresarial,clausulaAlteracaoNomeEmpresarial)
     
-    const enderecoNovo = `${data.dadosEmpresa.endereco.rua},${data.dadosEmpresa.endereco.numero} - 
-    ${data.dadosEmpresa.endereco.complemento} - ${data.dadosEmpresa.endereco.estado}/${data.dadosEmpresa.endereco.cidade}
-    - ${data.dadosEmpresa.endereco.cep}`
+    if(data.alteracoes.nomeEmpresarial.novoNome){
+      const alteracaoNomeEmpresarial =  new Paragraph({
+      
+        children: [
+     
+          new TextRun({
+            text: `NOME EMPRESARIAL`,
+            bold: true,
+            size: 24,
+            font: {
+              name: 'Arial'
+            }
+          }),
+         
+        ],
+     
+        alignment: AlignmentType.CENTER,
+        spacing: {
+          after: 200
+        },
+        
+          
+      })
+  
+      const clausulaAlteracaoNomeEmpresarial  =  new Paragraph({
+      
+        children: [
+     
+          new TextRun({
+            text: `CLÁUSULA ${data.alteracoes.nomeEmpresarial.numeroClasula}  `,
+            bold: true,
+            size: 24,
+            font: {
+              name: 'Arial'
+            }
+          }),
+          new TextRun({
+            text: `A sociedade que gira sob o nome empresarial ${data.razaoSocial}, girará, a partir da data do arquivamento, sob o nome empresarial ${data.alteracoes.nomeEmpresarial.novoNome}.`,
+            size: 24,
+            font: {
+              name: 'Arial'
+            }
+          }),
+         
+        ],
+     
+        alignment: AlignmentType.BOTH,
+        spacing: {
+          after: 600
+        },
+      })
+      paragrafos.push(alteracaoNomeEmpresarial,clausulaAlteracaoNomeEmpresarial)
+    
+    }
+
+  const enderecoNovo = `${data.dadosEmpresa.endereco.rua},${data.dadosEmpresa.endereco.numero} - 
+  ${data.dadosEmpresa.endereco.complemento} - ${data.dadosEmpresa.endereco.estado}/${data.dadosEmpresa.endereco.cidade}
+  - ${data.dadosEmpresa.endereco.cep}`
+
+
+  if(data.alteracoes.endereco.rua){
+    
 
     const alteracaoEndereco =  new Paragraph({
       
@@ -213,12 +223,15 @@ export default class ContratoAlteração {
         
     })
     paragrafos.push(alteracaoEndereco, clausulaAlteracaoEndereco)
-
+  }
+    
+ 
+  if(data.alteracoes.alteraçãoObjetoSocial){
     const alteracaoObjetoSocial = new Paragraph({
       children: [
 
         new TextRun({
-          text: 'OBJETO SOCIAL',
+          text: 'ALTERACAO DO OBJETO SOCIAL',
           font: {
             name: 'Arial',
           }, 
@@ -263,7 +276,7 @@ export default class ContratoAlteração {
     const descricaoAtividade = new Paragraph({
       children: [
         new TextRun({
-          text: data.dadosEmpresa.atividade.descricaoAtividade,
+          text: data.dadosEmpresa.descricaoAtividade,
           font: {
             name: 'Arial'
           },
@@ -297,122 +310,128 @@ export default class ContratoAlteração {
     })
     paragrafos.push(alteracaoObjetoSocial,calsulaAlteracaoObjetoSocial,descricaoAtividade,codificacaoAtividade)
 
-    const Cnae = new Paragraph({   
-      children:[
-        new TextRun({
-          text: `${data.dadosEmpresa.atividade.numeroCnae} - `,
-          font: {
-            name: 'Arial'
-          },
-          size: 24,
-          bold:true
-        }),
-        new TextRun({
-          text: `${data.dadosEmpresa.atividade.descricaoAtividade}`,
-          font: {
-            name: 'Arial'
-          },
-          size: 24,
-        })
-      ],  
-      alignment: AlignmentType.BOTH,
-      spacing: {
-        after: 200
-      }
+    data.dadosEmpresa.atividades.forEach((atividade) => {
+      const Cnae = new Paragraph({   
+        children:[
+          new TextRun({
+            text: `${atividade.numeroCnae} - `,
+            font: {
+              name: 'Arial'
+            },
+            size: 24,
+            bold:true
+          }),
+          new TextRun({
+            text: `${atividade.descricaoCnae}`,
+            font: {
+              name: 'Arial'
+            },
+            size: 24,
+          })
+        ],  
+        alignment: AlignmentType.BOTH,
+        spacing: {
+          after: 200
+        }
 
-    })
-    paragrafos.push(Cnae)
+      })
+      paragrafos.push(Cnae)
 
-
-
-    const capitalSocial = new Paragraph({
-      children: [
-
-        new TextRun({
-          text: 'DO CAPITAL SOCIAL',
-          font: {
-            name: 'Arial',
-          }, 
-          size: 24,
-          bold: true,
-        }) 
-
-      ],
-      alignment: AlignmentType.CENTER,
-      spacing: {
-        before: 800
-      }
-    });
-    const clasulaCapitalSocial = new Paragraph({
+      })
+    }
     
-      children: [
-
-        new TextRun({
-          text: 'CLASULA SEGUNDA: ' ,
-          font: {
-            name: 'Arial'
-          },
-          size: 24,
-          bold: true,
-        }),
-        new TextRun({
-          text: `O capital social que era de R$ ${data.alteracoes.capitalSocial.antigoCapital} (${data.alteracoes.capitalSocial.antigoCapitalExtenso} reais), passa a ser de R$ ${data.alteracoes.capitalSocial.novoCapital}. (${data.alteracoes.capitalSocial.novoCapitalExtenso} reais) representado por ${data.alteracoes.capitalSocial.quotas}(${data.alteracoes.capitalSocial.valorQuotaExtenso}) quotas de capital, no valor nominal de R$ ${data.alteracoes.capitalSocial.valorQuotas} (${data.alteracoes.capitalSocial.valorQuotaExtenso} real) cada uma, cujo aumento é totalmente subscrito e integralizado, neste ato, em moeda corrente nacional, pelos sócios. Em decorrência do aumento de capital social, este fica assim distribuído:` ,
-          font: {
-            name: 'Arial'
-          },
-          size: 24
-        }) 
+    if(data.alteracoes.capitalSocial.novoCapital){
+      const capitalSocial = new Paragraph({
+        children: [
+  
+          new TextRun({
+            text: 'DO CAPITAL SOCIAL',
+            font: {
+              name: 'Arial',
+            }, 
+            size: 24,
+            bold: true,
+          }) 
+  
+        ],
+        alignment: AlignmentType.CENTER,
+        spacing: {
+          before: 800
+        }
+      });
+      const clasulaCapitalSocial = new Paragraph({
       
-      ],
-      alignment: AlignmentType.BOTH,
-      spacing: {
-        after: 400,
-        before: 400
-      }
-    });
+        children: [
+  
+          new TextRun({
+            text: 'CLASULA SEGUNDA: ' ,
+            font: {
+              name: 'Arial'
+            },
+            size: 24,
+            bold: true,
+          }),
+          new TextRun({
+            text: `O capital social que era de R$ ${data.alteracoes.capitalSocial.antigoCapital} (${data.alteracoes.capitalSocial.antigoCapitalExtenso} reais), passa a ser de R$ ${data.alteracoes.capitalSocial.novoCapital}. (${data.alteracoes.capitalSocial.novoCapitalExtenso} reais) representado por ${data.alteracoes.capitalSocial.quotas}(${data.alteracoes.capitalSocial.valorQuotaExtenso}) quotas de capital, no valor nominal de R$ ${data.alteracoes.capitalSocial.valorQuotas} (${data.alteracoes.capitalSocial.valorQuotaExtenso} real) cada uma, cujo aumento é totalmente subscrito e integralizado, neste ato, em moeda corrente nacional, pelos sócios. Em decorrência do aumento de capital social, este fica assim distribuído:` ,
+            font: {
+              name: 'Arial'
+            },
+            size: 24
+          }) 
+        
+        ],
+        alignment: AlignmentType.BOTH,
+        spacing: {
+          after: 400,
+          before: 400
+        }
+      });
+      
 
-    const capitalSocialTabela = new Table({
-      alignment: AlignmentType.CENTER,     
-      width: {
-        size: 100,
-        type: WidthType.PERCENTAGE,
-      },
-      rows: [
-        tableSocios.headerTabela(),
-        tableSocios.sociosTabela(),
-        tableSocios.footerTabela()
-      ],
-     
-    })
+      
+
+      const capitalSocialTabela = new Table({
+        alignment: AlignmentType.CENTER,     
+        width: {
+          size: 100,
+          type: WidthType.PERCENTAGE,
+        },
+        rows: tableSocios.create()
+        
+       
+      })
+      
+      const responsabilidadeDosSocios = new Paragraph ({
+        children: [
+  
+          new TextRun({
+            text: 'Parágrafo único.' ,
+            font: {
+              name: 'Arial'
+            },
+            size: 24,
+            bold: true,
+          }),
+          new TextRun({
+            text: ' A responsabilidade dos sócios é restrita ao valor de suas quotas, mas todos respondem solidariamente pela integralização do capital social, na forma do art. 1052 da Lei 10.406/02. Cada quota é indivisível e confere a seu titular o direito a voto nas deliberações sociais. ' ,
+            font: {
+              name: 'Arial'
+            },
+            size: 24,
+          }),
+        ],
+        alignment: AlignmentType.BOTH,
+        spacing: {
+          after: 400,
+          before: 400,
+        }
+      })
+      paragrafos.push(capitalSocial,clasulaCapitalSocial,capitalSocialTabela, responsabilidadeDosSocios)
+      return paragrafos
+    }
+    }
+
     
-    const responsabilidadeDosSocios = new Paragraph ({
-      children: [
-
-        new TextRun({
-          text: 'Parágrafo único.' ,
-          font: {
-            name: 'Arial'
-          },
-          size: 24,
-          bold: true,
-        }),
-        new TextRun({
-          text: ' A responsabilidade dos sócios é restrita ao valor de suas quotas, mas todos respondem solidariamente pela integralização do capital social, na forma do art. 1052 da Lei 10.406/02. Cada quota é indivisível e confere a seu titular o direito a voto nas deliberações sociais. ' ,
-          font: {
-            name: 'Arial'
-          },
-          size: 24,
-        }),
-      ],
-      alignment: AlignmentType.BOTH,
-      spacing: {
-        after: 400,
-        before: 400,
-      }
-    })
-    paragrafos.push(capitalSocial,clasulaCapitalSocial,capitalSocialTabela, responsabilidadeDosSocios)
-    return paragrafos
-  }
 
 }
 
