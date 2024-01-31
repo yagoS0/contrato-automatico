@@ -1,10 +1,11 @@
 import {Paragraph, TextRun, TableRow, TableCell, VerticalAlign, WidthType, AlignmentType} from 'docx'
-import {data} from '../../tests/data_test'
+import IData from '../../services/Interface/IData'
 
 
-export class TableSocios{
+class TableSocios{
 
-  create(){
+  create(data){
+
     const rowsSocios: TableRow[] = []
     const cabecalho = new TableRow({
         
@@ -98,7 +99,8 @@ export class TableSocios{
 
     
     rowsSocios.push(cabecalho)
-    data.dadosSocio.socios.forEach(socio => {
+    data.dadosSocios.forEach(socio => {
+
       const sociosTabela =  new TableRow({
         tableHeader: true,
           children: [
@@ -133,7 +135,7 @@ export class TableSocios{
                alignment: AlignmentType.CENTER,
                 children:[
                   new TextRun({
-                    text: `${(socio.porcentagemCapital/100) * parseInt(data.capitalSocial.numeroQuotas)}`,
+                    text: `${(socio.porcentagemCapital/100) * (data.capitalSocial.quotas)}`,
                     font: {
                       name: 'Arial'
                     },
@@ -174,7 +176,7 @@ export class TableSocios{
                alignment: AlignmentType.CENTER,
                 children:[
                   new TextRun({
-                    text: `${(socio.porcentagemCapital/100) * parseInt(data.capitalSocial.valor)},00`,
+                    text: `${(socio.porcentagemCapital/100) * (data.capitalSocial.capital)},00`,
                     font: {
                       name: 'Arial'
                     },
@@ -224,7 +226,7 @@ export class TableSocios{
              alignment: AlignmentType.CENTER,
               children:[
                 new TextRun({
-                  text: data.capitalSocial.numeroQuotas,
+                  text: data.capitalSocial.quotas.toString(),
                   font: {
                     name: 'Arial'
                   },
@@ -245,7 +247,7 @@ export class TableSocios{
              alignment: AlignmentType.CENTER,
               children:[
                 new TextRun({
-                  text: data.capitalSocial.porcentagemSocio,
+                  text: '100%',
                   font: {
                     name: 'Arial'
                   },
@@ -264,7 +266,7 @@ export class TableSocios{
             children: [new Paragraph({
               children:[
                 new TextRun({
-                  text: data.capitalSocial.valor,
+                  text: data.capitalSocial.capital.toString(),
                   font: {
                     name: 'Arial'
                   },
@@ -281,3 +283,5 @@ export class TableSocios{
     return rowsSocios
   }
 }
+
+export default TableSocios
